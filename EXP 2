@@ -1,0 +1,33 @@
+def is_safe(board, row, col, n):
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
+        if col - (row - i) >= 0 and board[i][col - (row - i)] == 1:
+            return False
+        if col + (row - i) < n and board[i][col + (row - i)] == 1:
+            return False
+    return True
+
+def solve_nqueens(board, row, n, result):
+    if row == n:
+        result.append([row[:] for row in board])
+        return True
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row][col] = 1
+            if solve_nqueens(board, row + 1, n, result):
+                return True  
+            board[row][col] = 0
+    return False
+
+def print_solution(solution):
+    for row in solution:
+        print(row)
+
+n = 8 
+board = [[0] * n for _ in range(n)]  
+result = []  
+if solve_nqueens(board, 0, n, result):
+    print_solution(result[0]) 
+else:
+    print("No solution found.")
