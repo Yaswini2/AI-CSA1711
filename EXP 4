@@ -1,0 +1,24 @@
+from itertools import permutations
+def solve_cryptarithmetic():
+    letters = 'SENDMORY'
+    for perm in permutations(range(10), len(letters)):
+        letter_to_digit = dict(zip(letters, perm))
+        if letter_to_digit['S'] == 0 or letter_to_digit['M'] == 0:
+            continue
+        send = int(''.join(str(letter_to_digit[letter]) for letter in 'SEND'))
+        more = int(''.join(str(letter_to_digit[letter]) for letter in 'MORE'))
+        money = int(''.join(str(letter_to_digit[letter]) for letter in 'MONEY'))
+        if send + more == money:
+            return letter_to_digit, send, more, money
+    return None
+solution = solve_cryptarithmetic()
+if solution:
+    letter_to_digit, send, more, money = solution
+    print("Solution Found")
+    print(f"SEND + MORE = MONEY")
+    print(f"{send} + {more} = {money}")
+    print("Letter to Digit Mapping:")
+    for letter, digit in letter_to_digit.items():
+        print(f"{letter} = {digit}")
+else:
+    print("No solution found")
