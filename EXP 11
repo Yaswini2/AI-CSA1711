@@ -1,0 +1,28 @@
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B'],
+    'D': ['B']
+}
+colors = ['Red', 'Green', 'Blue']  
+def is_valid(assignment, node, color):
+    return all(assignment.get(neighbor) != color for neighbor in graph[node])
+def backtrack(assignment):
+    if len(assignment) == len(graph):
+        return assignment
+    node = next(n for n in graph if n not in assignment)
+    for color in colors:
+        if is_valid(assignment, node, color):
+            assignment[node] = color
+            result = backtrack(assignment)
+            if result:
+                return result
+            del assignment[node]  
+    return None
+def solve():
+    result = backtrack({})
+    if result:
+        print("Map Coloring:", result)
+    else:
+        print("No solution found.")
+solve()
