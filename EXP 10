@@ -1,0 +1,33 @@
+def astar(grid, start, goal):
+    from heapq import heappop, heappush
+    def h(a, b): return abs(a[0]-b[0]) + abs(a[1]-b[1])
+    open = [(0, start)]
+    came = {}
+    g = {start: 0}
+    while open:
+        _, cur = heappop(open)
+        if cur == goal:
+            path = []
+            while cur in came:
+                path.append(cur)
+                cur = came[cur]
+            return [start] + path[::-1]
+        for dx, dy in [(0,1),(1,0),(0,-1),(-1,0)]:
+            nxt = (cur[0]+dx, cur[1]+dy)
+            if 0 <= nxt[0] < len(grid) and 0 <= nxt[1] < len(grid[0]) and grid[nxt[0]][nxt[1]] == 0:
+                temp_g = g[cur] + 1
+                if nxt not in g or temp_g < g[nxt]:
+                    g[nxt] = temp_g
+                    heappush(open, (temp_g + h(nxt, goal), nxt))
+                    came[nxt] = cur
+    return []
+grid = [
+    [0,0,0,0],
+    [1,1,0,1],
+    [0,0,0,0],
+    [0,1,1,0]
+]
+start = (0, 0)
+goal = (3, 3)
+print("Path:", astar(grid, start, goal))
+
