@@ -1,0 +1,19 @@
+def build(data):
+    labels = [row[-1] for row in data]
+    if labels.count(labels[0]) == len(labels):
+        return labels[0]
+    col = 0  # use first column to split
+    tree = {}
+    for val in set(row[col] for row in data):
+        subset = [row[1:] for row in data if row[col] == val]
+        tree[val] = build(subset)
+    return tree
+data = [
+    ['Sunny', 'Yes'],
+    ['Rainy', 'No'],
+    ['Sunny', 'Yes'],
+    ['Rainy', 'No']
+]
+
+tree = build(data)
+print(tree)
