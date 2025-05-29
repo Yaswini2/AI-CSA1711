@@ -1,0 +1,25 @@
+def win(b):
+    for i in [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]:
+        if b[i[0]] == b[i[1]] == b[i[2]] != ' ': return b[i[0]]
+    return 'D' if ' ' not in b else None
+
+def ab(b, turn, a, bta):
+    r = win(b)
+    if r: return {'X':1, 'O':-1, 'D':0}[r]
+    best = -2 if turn=='X' else 2
+    for i in range(9):
+        if b[i]==' ':
+            b[i]=turn
+            val = ab(b, 'O' if turn=='X' else 'X', a, bta)
+            b[i]=' '
+            if turn=='X':
+                best = max(best, val)
+                a = max(a, best)
+            else:
+                best = min(best, val)
+                bta = min(bta, best)
+            if bta <= a: break
+    return best
+
+def move(b):
+    return max((ab(b[:i] + ['X'] + b[i+1:], 'O', -2, 2), i) for i in range(9) if b[i]==' ')[1]
